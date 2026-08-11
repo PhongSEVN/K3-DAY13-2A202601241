@@ -1,0 +1,53 @@
+{
+  "step1_before": {
+    "note": "truoc khi doi label",
+    "versions": {
+      "1": [
+        "baseline",
+        "production"
+      ],
+      "2": [
+        "candidate",
+        "latest"
+      ]
+    }
+  },
+  "step2_after_promote": {
+    "note": "sau khi promote v2",
+    "versions": {
+      "1": [
+        "baseline"
+      ],
+      "2": [
+        "candidate",
+        "latest",
+        "production"
+      ]
+    }
+  },
+  "step4_after_rollback": {
+    "note": "sau khi rollback ve v1",
+    "versions": {
+      "1": [
+        "baseline",
+        "production"
+      ],
+      "2": [
+        "candidate",
+        "latest"
+      ]
+    }
+  },
+  "trace_after_promote": {
+    "trace_id": "f48d1f9fe613bf51e80f247de1833126",
+    "prompt_label": "production",
+    "prompt_version": 2,
+    "prompt_source": "langfuse"
+  },
+  "trace_after_rollback": {
+    "trace_id": "56118dfc5b0c8b787a21cee2bd1b4976",
+    "prompt_label": "production",
+    "prompt_version": 1,
+    "prompt_source": "langfuse"
+  }
+}

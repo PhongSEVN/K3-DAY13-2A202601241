@@ -7,3 +7,6 @@ data/audit.jsonl
 .env
 .pytest_cache/
 .antigravity/
+
+# Ghi chu ca nhan, khong nop
+Checkpoint_linh.md
