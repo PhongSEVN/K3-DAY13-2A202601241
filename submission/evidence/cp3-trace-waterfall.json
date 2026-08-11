@@ -1,0 +1,34 @@
+{
+  "trace_id": "26c1bec9d203747a6199dd2df08a0d48",
+  "session": "k3-challenge-s01",
+  "total_latency_s": 2.655,
+  "spans": [
+    {
+      "name": "run",
+      "type": "GENERATION",
+      "latency_s": 2.655,
+      "metadata": {
+        "doc_count": 1,
+        "rag_ms": 2501,
+        "llm_ms": 150
+      }
+    },
+    {
+      "name": "llm-generate",
+      "type": "SPAN",
+      "latency_s": 0.151,
+      "metadata": {
+        "generation_ms": 150
+      }
+    },
+    {
+      "name": "rag-retrieve",
+      "type": "SPAN",
+      "latency_s": 2.501,
+      "metadata": {
+        "retrieval_ms": 2501,
+        "doc_count": 1
+      }
+    }
+  ]
+}
