@@ -41,6 +41,23 @@ def test_load_logs_reports_missing_file(tmp_path: Path) -> None:
     assert result.error == "Log file not found"
 
 
+def test_load_logs_skips_non_scalar_timestamps(tmp_path: Path) -> None:
+    path = tmp_path / "logs.jsonl"
+    write_jsonl(
+        path,
+        [
+            {"ts": {"invalid": "timestamp"}, "event": "request_received"},
+            {"ts": ["also-invalid"], "event": "response_sent"},
+        ],
+    )
+
+    result = load_logs(path)
+
+    assert result.records.empty
+    assert result.skipped_lines == 2
+    assert result.error is None
+
+
 def test_filter_window_uses_latest_sixty_minutes() -> None:
     records = pd.DataFrame(
         {

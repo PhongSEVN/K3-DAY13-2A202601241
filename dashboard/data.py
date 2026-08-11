@@ -33,8 +33,12 @@ def load_logs(path: Path) -> LogReadResult:
                 if not isinstance(row, dict) or "ts" not in row or "event" not in row:
                     skipped += 1
                     continue
-                parsed_ts = pd.to_datetime(row["ts"], utc=True, errors="coerce")
-                if pd.isna(parsed_ts):
+                try:
+                    parsed_ts = pd.to_datetime(row["ts"], utc=True, errors="coerce")
+                except (TypeError, ValueError):
+                    skipped += 1
+                    continue
+                if not isinstance(parsed_ts, pd.Timestamp) or pd.isna(parsed_ts):
                     skipped += 1
                     continue
                 row["ts"] = parsed_ts
