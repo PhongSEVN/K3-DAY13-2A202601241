@@ -2,10 +2,11 @@
 
 ## 1. Thông tin nhóm
 
-- Tên nhóm:
-- Repository URL:
-- Commit SHA cuối:
+- Tên nhóm: Nhóm Day13 Observability (K3)
+- Repository URL: https://github.com/PhongSEVN/K3-DAY13-2A202601241
+- Commit SHA cuối: _(điền sau khi push cuối)_
 - Thành viên và vai trò:
+
   | Vai | Thành viên | MSSV |
   |---|---|---|
   | A — API & Middleware | Lê Thị Yến Nhi | 2A202601031 |
@@ -19,13 +20,13 @@
 - Điểm `validate_logs.py`: **100/100** — xem [evidence/cp0-baseline-validate-logs.txt](evidence/cp0-baseline-validate-logs.txt)
 - Tổng số traces: **87** trên Langfuse Cloud (yêu cầu tối thiểu 10) — xem [evidence/cp2-traces-list.json](evidence/cp2-traces-list.json)
 - Số PII leak còn lại: **0** (`Potential PII leaks detected: 0`)
-- Link/đường dẫn dashboard: _(C — Thanh Phúc điền)_
+- Link/đường dẫn dashboard: `streamlit run scripts/dashboard_app.py` (nguồn `data/logs.jsonl`); contract `config/dashboard.yaml` — ảnh [evidence/dashboard-6-panels.png](evidence/dashboard-6-panels.png), [evidence/dashboard-p95-latency.png](evidence/dashboard-p95-latency.png)
 
 ## 3. Logging và tracing
 
 - Evidence correlation ID: [evidence/cp1-correlation-id-logs.jsonl](evidence/cp1-correlation-id-logs.jsonl) — mỗi bản ghi `service=api` có `correlation_id` dạng `req-<8 hex>`, kèm `user_id_hash`, `session_id`, `feature`, `model`, `env`.
 - Evidence PII redaction: [evidence/cp1-pii-redacted-logs.jsonl](evidence/cp1-pii-redacted-logs.jsonl) — email/SĐT/thẻ trong input đã thành `[REDACTED_EMAIL]`, `[REDACTED_PHONE_VN]`, `[REDACTED_CREDIT_CARD]`.
-- Evidence trace waterfall: [evidence/cp3-trace-waterfall.json](evidence/cp3-trace-waterfall.json)
+- Evidence trace waterfall: [evidence/cp3-trace-waterfall.json](evidence/cp3-trace-waterfall.json), ảnh [evidence/waterfall.png](evidence/waterfall.png), [evidence/waterfall-rag-retrieve.png](evidence/waterfall-rag-retrieve.png)
 - Giải thích một span đáng chú ý:
 
   Trace `26c1bec9d203747a6199dd2df08a0d48` có 3 span:
@@ -40,7 +41,7 @@
 
 ## 4. Prompt versioning
 
-- Prompt name: `day13-chat` (Langfuse Cloud) — xem [evidence/cp2-prompt-versions.json](evidence/cp2-prompt-versions.json)
+- Prompt name: `day13-chat` (Langfuse Cloud) — xem [evidence/cp2-prompt-versions.json](evidence/cp2-prompt-versions.json); ảnh UI [evidence/prompt-v1-v2.png](evidence/prompt-v1-v2.png)
 - Version/label baseline: **version 1**, labels `baseline` + `production`
   `Feature={{feature}}\nDocs={{docs}}\nQuestion={{message}}\nAnswer briefly in 2-3 sentences.`
 - Version/label candidate: **version 2**, labels `candidate` + `latest`
@@ -52,7 +53,7 @@
   | `baseline` | 1 | `s_ab_baseline` | `301ea5b0f276d0f1c985561873459f04` |
   | `candidate` | 2 | `s_ab_candidate` | `388d20e1146e5715891bdf36ac5b5d77` |
 
-  Cả hai trace đều có `prompt_source=langfuse` (không phải fallback local).
+  Cả hai trace đều có `prompt_source=langfuse` (không phải fallback local). Ảnh metadata bổ sung: [evidence/trace-baseline-metadata.png](evidence/trace-baseline-metadata.png), [evidence/trace-candidate-metadata.png](evidence/trace-candidate-metadata.png).
 
 - Bằng chứng đổi label hoặc rollback: [evidence/cp2-prompt-rollback.json](evidence/cp2-prompt-rollback.json)
 
@@ -67,15 +68,15 @@
 ## 5. Dashboard, SLO và alerts
 
 - Kết quả `validate_dashboard.py`: `HỢP LỆ: 6/6 panel có trong dashboard contract.`
-- Evidence dashboard: _(C — Thanh Phúc điền)_
-- SLO đã chọn và lý do: _(D — Huy Hoàng điền)_
-- Alert rules và runbook: _(D — Huy Hoàng điền)_
+- Evidence dashboard: [evidence/dashboard-6-panels.png](evidence/dashboard-6-panels.png), challenge P95 cao [evidence/dashboard-p95-latency.png](evidence/dashboard-p95-latency.png)
+- SLO đã chọn và lý do: P95 ≤ 3000 ms, error ≤ 2%, cost ≤ 2.5 USD, quality ≥ 0.75 — khớp threshold trong `config/dashboard.yaml` / `config/slo.yaml`
+- Alert rules và runbook: `config/alert_rules.yaml`, `docs/alerts.md` (High Latency P95, High Error Rate, Cost or Quality SLO Breach)
 
   Đề xuất từ điều tra CP3 để D cân nhắc: ngưỡng cảnh báo latency nên **chặt hơn** SLO. Sự cố challenge đẩy p95 lên 2656ms — vượt ngưỡng challenge 2000ms nhưng vẫn dưới SLO 3000ms, nên nếu chỉ alert theo SLO thì sự cố này lọt lưới hoàn toàn.
 
 ## 6. Điều tra challenge
 
-Bằng chứng đầy đủ: [evidence/cp3-metrics-before-after.txt](evidence/cp3-metrics-before-after.txt), [evidence/cp3-challenge-logs.jsonl](evidence/cp3-challenge-logs.jsonl), [evidence/cp3-trace-waterfall.json](evidence/cp3-trace-waterfall.json)
+Bằng chứng đầy đủ: [evidence/cp3-metrics-before-after.txt](evidence/cp3-metrics-before-after.txt), [evidence/cp3-challenge-logs.jsonl](evidence/cp3-challenge-logs.jsonl), [evidence/cp3-trace-waterfall.json](evidence/cp3-trace-waterfall.json), [evidence/cp3-challenge-notes.md](evidence/cp3-challenge-notes.md), ảnh [evidence/waterfall-rag-retrieve.png](evidence/waterfall-rag-retrieve.png), [evidence/rag-retrieve-done.png](evidence/rag-retrieve-done.png)
 
 - **Challenge ID:** `day13-k3-observability-v1` (cohort K3, `affected_feature=refund`, `latency_threshold_ms=2000`)
 
@@ -118,8 +119,8 @@ Bằng chứng đầy đủ: [evidence/cp3-metrics-before-after.txt](evidence/cp
 
 | Thành viên | Phần việc | Commit/PR | Điều đã học |
 |---|---|---|---|
-| Phạm Khánh Linh (E) | Setup + baseline CP0; tách span `rag-retrieve`/`llm-generate` và log latency theo bước; sửa lỗi mất trace do `LANGFUSE_TIMEOUT`; A/B prompt v1/v2; promote + rollback label `production`; chạy và điều tra challenge CP3; tổng hợp `REPORT.md` + evidence | | `tracing_enabled: true` chỉ nghĩa là có key, không đảm bảo trace đã lên được server — phải kiểm chứng bằng API. Một span duy nhất cho cả request là vô dụng khi debug. `time.sleep()` trong `async def` block cả event loop và khuếch đại sự cố theo số request đồng thời. |
-| Lê Thị Yến Nhi (A) | | | |
-| Nguyễn Văn Phong (B) | | | |
-| Nguyễn Thanh Phúc (C) | | | |
-| Vũ Huy Hoàng (D) | | | |
+| Phạm Khánh Linh (E) | Setup + baseline CP0; tách span `rag-retrieve`/`llm-generate` và log latency theo bước; sửa lỗi mất trace do `LANGFUSE_TIMEOUT`; A/B prompt v1/v2; promote + rollback label `production`; chạy và điều tra challenge CP3; tổng hợp `REPORT.md` + evidence | PR `linh` | `tracing_enabled: true` chỉ nghĩa là có key, không đảm bảo trace đã lên được server — phải kiểm chứng bằng API. Một span duy nhất cho cả request là vô dụng khi debug. `time.sleep()` trong `async def` block cả event loop và khuếch đại sự cố theo số request đồng thời. |
+| Lê Thị Yến Nhi (A) | Correlation ID middleware + enrich log context | branch `feat/a-middleware` | Propagation correlation ID xuyên request |
+| Nguyễn Văn Phong (B) | PII patterns + scrubber; hỗ trợ dashboard/evidence CP2–CP3 | `feat/cp2-observability` | Redact trước khi ghi JSONL; nối Metrics → Traces → Logs |
+| Nguyễn Thanh Phúc (C) | Dashboard 6 panel / `error_rate_pct` | dashboard evidence | Đọc metrics từ `logs.jsonl` |
+| Vũ Huy Hoàng (D) | SLO, 3 alerts, runbook | PR `feat/d-slo-alerts` | Alert symptom-based theo SLO |
