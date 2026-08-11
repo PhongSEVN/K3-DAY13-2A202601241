@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Day 13 Observability Lab</title>
+<style>
+  :root {
+    --bg: #f4f6f8;
+    --panel: #ffffff;
+    --panel-2: #f0f2f5;
+    --border: #d7dde4;
+    --text: #1c2733;
+    --muted: #64748b;
+    --accent: #0e8f6e;
+    --accent-dim: #d4f0e6;
+    --warn: #b5790a;
+    --warn-bg: #fbecd0;
+    --err: #c8372f;
+    --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 14px;
+  }
+  body {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+  }
+  header {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: baseline; gap: 12px;
+    background: linear-gradient(180deg, var(--panel-2), var(--bg));
+  }
+  header h1 {
+    font-size: 15px; font-weight: 600; margin: 0;
+    letter-spacing: 0.04em; text-transform: uppercase; color: var(--text);
+  }
+  header .tag {
+    color: var(--muted); font-size: 12px;
+  }
+  #health-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--muted); display: inline-block; margin-right: 6px;
+    box-shadow: 0 0 0 3px transparent; transition: box-shadow .2s, background .2s;
+  }
+  #health-dot.ok { background: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+  #health-dot.down { background: var(--err); box-shadow: 0 0 0 3px #f6d6d3; }
+
+  main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+    gap: 16px;
+    padding: 16px;
+    max-width: 1200px; width: 100%; margin: 0 auto;
+  }
+  @media (max-width: 860px) {
+    main { grid-template-columns: 1fr; }
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .panel h2 {
+    margin: 0 0 4px;
+    font-size: 11px; text-transform: uppercase; letter-spacing: .08em;
+    color: var(--muted); font-weight: 600;
+  }
+  .hint {
+    margin: 0 0 14px;
+    font-size: 12px; line-height: 1.5;
+    color: var(--muted);
+  }
+  header .subtitle {
+    display: block; margin-top: 3px;
+    font-size: 12px; color: var(--muted); letter-spacing: normal; text-transform: none;
+  }
+
+  .field { margin-bottom: 10px; }
+  .field label {
+    display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px;
+  }
+  .row { display: flex; gap: 10px; }
+  .row .field { flex: 1; }
+  input[type=text], select, textarea {
+    width: 100%;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 13px;
+    outline: none;
+  }
+  input[type=text]:focus, select:focus, textarea:focus {
+    border-color: var(--accent);
+  }
+  textarea { resize: vertical; min-height: 70px; }
+
+  button {
+    background: var(--accent);
+    color: #ffffff;
+    border: none;
+    padding: 9px 16px;
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: transform .08s ease, opacity .15s ease;
+  }
+  button:hover { opacity: .88; }
+  button:active { transform: translateY(1px); }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  button.secondary {
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--border);
+    font-weight: 500;
+  }
+  button.danger-active { background: var(--warn-bg); color: var(--warn); border-color: var(--warn); }
+
+  #conversation {
+    margin-top: 14px;
+    display: flex; flex-direction: column; gap: 10px;
+    max-height: 46vh; overflow-y: auto;
+    padding-right: 4px;
+  }
+  .msg {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    background: var(--panel-2);
+  }
+  .msg .role {
+    font-size: 10px; text-transform: uppercase; letter-spacing: .06em;
+    color: var(--muted); margin-bottom: 6px;
+  }
+  .msg.user .role { color: var(--accent); }
+  .msg .text { white-space: pre-wrap; line-height: 1.4; }
+  .msg .meta {
+    margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border);
+    display: flex; flex-wrap: wrap; gap: 8px 16px;
+    font-size: 11px; color: var(--muted);
+  }
+  .msg .meta b { color: var(--text); }
+  .msg.err { border-color: var(--err); }
+  .msg.err .role { color: var(--err); }
+
+  .kv { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .kv:last-child { border-bottom: none; }
+  .kv .k { color: var(--muted); }
+  .kv .v { color: var(--text); font-weight: 600; }
+  .kv .v.breach { color: var(--err); }
+  .kv .v.within { color: var(--accent); }
+
+  .status-row { display: flex; align-items: flex-start; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .status-row:last-child { border-bottom: none; }
+  .status-row .badge { flex: 0 0 auto; font-size: 10px; padding: 2px 7px; border-radius: 999px; font-weight: 700; }
+  .badge.done { color: var(--accent); background: var(--accent-dim); }
+  .badge.missing { color: var(--err); background: #fbdedb; }
+  .status-row .who { color: var(--text); }
+  .status-row .who b { font-weight: 700; }
+  .status-row .note { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; }
+  .linkbtn { display: inline-block; margin-top: 8px; font-size: 11px; }
+
+  .incident-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--border); }
+  .incident-row:last-child { border-bottom: none; }
+  .incident-row .name { font-size: 12px; }
+  .pill { font-size: 10px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); }
+  .pill.on { color: var(--warn); background: var(--warn-bg); border-color: var(--warn); }
+
+  footer {
+    padding: 10px 24px; color: var(--muted); font-size: 11px;
+    border-top: 1px solid var(--border);
+  }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Day 13 · Observability Lab
+      <span class="subtitle">Trang demo: gửi tin nhắn ở đây để sinh log/trace/metric thật, dùng cho phần điều tra observability của lab.</span>
+    </h1>
+  </div>
+  <span class="tag"><span id="health-dot"></span><span id="health-text">checking...</span></span>
+</header>
+
+<main>
+  <section class="panel">
+    <h2>1. Chat — gửi request test</h2>
+    <p class="hint">Điền thông tin bên dưới rồi bấm "Gửi request". Mỗi lần gửi = 1 request thật tới API <code>/chat</code>, tạo ra 1 dòng log mới trong <code>data/logs.jsonl</code> kèm <code>correlation_id</code> riêng — dùng cái này để lần theo 1 request cụ thể khi điều tra sự cố.</p>
+    <div class="row">
+      <div class="field">
+        <label for="user_id">user_id</label>
+        <input type="text" id="user_id" value="u_team_01" />
+      </div>
+      <div class="field">
+        <label for="session_id">session_id</label>
+        <input type="text" id="session_id" value="s_demo_01" />
+      </div>
+      <div class="field" style="flex: 0 0 130px;">
+        <label for="feature">feature</label>
+        <select id="feature">
+          <option value="qa">qa</option>
+          <option value="summary">summary</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="message">message</label>
+      <textarea id="message" placeholder="Nhap noi dung...">Toi can ho tro ve don hang gan nhat</textarea>
+    </div>
+    <button id="send-btn" onclick="sendChat()">Gửi request</button>
+
+    <div id="conversation"></div>
+  </section>
+
+  <aside style="display:flex; flex-direction:column; gap:16px;">
+    <div class="panel">
+      <h2>2. Metrics — số liệu cộng dồn</h2>
+      <p class="hint">Tổng hợp từ tất cả request đã gửi trong phiên chạy này (endpoint <code>/metrics</code>). Tự cập nhật mỗi 5 giây. Màu <span style="color:var(--err)">đỏ</span> = đang vi phạm ngưỡng SLO trong <code>config/slo.yaml</code> (vai D).</p>
+      <div id="metrics-box">
+        <div class="kv"><span class="k">traffic (tổng số request)</span><span class="v" id="m-traffic">-</span></div>
+        <div class="kv"><span class="k">latency p50 / p95 (ms) — SLO ≤ 3000</span><span class="v" id="m-latency">-</span></div>
+        <div class="kv"><span class="k">error rate — SLO ≤ 2%</span><span class="v" id="m-errors">-</span></div>
+        <div class="kv"><span class="k">total cost (USD) — SLO/ngày ≤ 2.5</span><span class="v" id="m-cost">-</span></div>
+        <div class="kv"><span class="k">tokens in / out</span><span class="v" id="m-tokens">-</span></div>
+        <div class="kv"><span class="k">quality avg — SLO ≥ 0.75</span><span class="v" id="m-quality">-</span></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Incidents — giả lập sự cố</h2>
+      <p class="hint">Bật 1 sự cố để giả lập hệ thống bị chậm/lỗi/tốn phí, rồi gửi lại chat ở panel 1 — số liệu Metrics và log sẽ đổi theo, dùng để tập điều tra root cause. Nhớ Tắt lại sau khi demo xong.</p>
+      <div id="incidents-box">đang tải...</div>
+    </div>
+
+    <div class="panel">
+      <h2>4. Thông tin request cuối</h2>
+      <p class="hint"><code>correlation_id</code> là mã định danh duy nhất của 1 request — dùng để tìm đúng dòng log/trace tương ứng.</p>
+      <div class="kv"><span class="k">correlation_id gần nhất</span><span class="v" id="last-cid">-</span></div>
+      <div class="kv"><span class="k">file log</span><span class="v">data/logs.jsonl</span></div>
+    </div>
+
+    <div class="panel">
+      <h2>5. Tiến độ nhóm (theo TEAM_PLANS.md)</h2>
+      <p class="hint">Trạng thái cập nhật thủ công sau khi rà lại git log — không tự động.</p>
+      <div class="status-row">
+        <span class="badge done">XONG</span>
+        <span class="who"><b>A — Yến Nhi</b> · middleware, correlation ID<span class="note">merged: feat/a-middleware</span></span>
+      </div>
+      <div class="status-row">
+        <span class="badge done">XONG</span>
+        <span class="who"><b>B — Phong (mình)</b> · PII scrubbing<span class="note">validate_logs.py 100/100</span></span>
+      </div>
+      <div class="status-row">
+        <span class="badge missing">THIẾU</span>
+        <span class="who"><b>C — Thanh Phúc</b> · Dashboard 6 panel<span class="note">branch feat/metric-dashboard chưa merge, chỉ sửa .gitignore — chưa có code dashboard thật. E đã build tạm <code>scripts/dashboard_app.py</code> để thay thế.</span></span>
+      </div>
+      <div class="status-row">
+        <span class="badge done">XONG</span>
+        <span class="who"><b>D — Huy Hoàng</b> · SLO, 3 alerts, runbook<span class="note">merged: feat/d-slo-alerts</span></span>
+      </div>
+      <div class="status-row">
+        <span class="badge missing">DANG DỞ</span>
+        <span class="who"><b>E — Khánh Linh</b> · trace/prompt version + report<span class="note">trace + prompt evidence đã có; <code>submission/REPORT.md</code> còn trống hoàn toàn; CP3 challenge chưa điều tra</span></span>
+      </div>
+      <a class="linkbtn" href="http://localhost:8501" target="_blank" rel="noopener">→ Mở dashboard Streamlit (cần chạy: <code>streamlit run scripts/dashboard_app.py</code>)</a>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  Giao diện này chạy chung tiến trình với API backend (FastAPI serve trực tiếp), không cần server riêng.
+  Các endpoint đang dùng: <code>/chat</code> (gửi tin nhắn), <code>/health</code> (trạng thái), <code>/metrics</code> (số liệu), <code>/incidents/&lt;tên&gt;/enable|disable</code> (bật/tắt sự cố giả lập).
+</footer>
+
+<script>
+const conv = document.getElementById('conversation');
+const dot = document.getElementById('health-dot');
+const healthText = document.getElementById('health-text');
+const sendBtn = document.getElementById('send-btn');
+
+function addMsg(role, text, meta, isErr) {
+  const cls = { 'ban gui': 'user', 'api trả lời': 'assistant', 'lỗi': 'error' }[role] || 'assistant';
+  const div = document.createElement('div');
+  div.className = 'msg ' + cls + (isErr ? ' err' : '');
+  let html = `<div class="role">${role}</div><div class="text"></div>`;
+  div.innerHTML = html;
+  div.querySelector('.text').textContent = text;
+  if (meta) {
+    const metaDiv = document.createElement('div');
+    metaDiv.className = 'meta';
+    metaDiv.innerHTML = meta;
+    div.appendChild(metaDiv);
+  }
+  conv.appendChild(div);
+  conv.scrollTop = conv.scrollHeight;
+}
+
+async function sendChat() {
+  const user_id = document.getElementById('user_id').value.trim();
+  const session_id = document.getElementById('session_id').value.trim();
+  const feature = document.getElementById('feature').value;
+  const message = document.getElementById('message').value.trim();
+  if (!message) return;
+
+  addMsg('ban gui', message);
+  sendBtn.disabled = true;
+  sendBtn.textContent = 'Đang gửi...';
+
+  try {
+    const res = await fetch('/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id, session_id, feature, message }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      addMsg('lỗi', data.detail || 'request thất bại', null, true);
+    } else {
+      const meta = `
+        <span><b>correlation_id:</b> ${data.correlation_id}</span>
+        <span><b>latency:</b> ${data.latency_ms}ms</span>
+        <span><b>tokens:</b> ${data.tokens_in} in / ${data.tokens_out} out</span>
+        <span><b>cost:</b> $${data.cost_usd}</span>
+        <span><b>quality:</b> ${data.quality_score}</span>
+      `;
+      addMsg('api trả lời', data.answer, meta);
+      document.getElementById('last-cid').textContent = data.correlation_id;
+    }
+  } catch (e) {
+    addMsg('lỗi', String(e), null, true);
+  } finally {
+    sendBtn.disabled = false;
+    sendBtn.textContent = 'Gửi request';
+    refreshMetrics();
+  }
+}
+
+async function refreshHealth() {
+  try {
+    const res = await fetch('/health');
+    const data = await res.json();
+    dot.className = data.ok ? 'ok' : 'down';
+    healthText.textContent = data.ok ? 'API đang chạy' : 'API lỗi';
+    renderIncidents(data.incidents || {});
+  } catch (e) {
+    dot.className = 'down';
+    healthText.textContent = 'không kết nối được API';
+  }
+}
+
+// nguong tu config/slo.yaml (vai D) - copy tay, khong doc file truc tiep tu trinh duyet
+const SLO = {
+  latency_p95_ms: 3000,
+  error_rate_pct: 2,
+  daily_cost_usd: 2.5,
+  quality_score_avg: 0.75,
+};
+
+function setMetric(id, text, breach) {
+  const el = document.getElementById(id);
+  el.textContent = text;
+  el.classList.toggle('breach', !!breach);
+  el.classList.toggle('within', !breach);
+}
+
+async function refreshMetrics() {
+  try {
+    const res = await fetch('/metrics');
+    const data = await res.json();
+    const errTotal = Object.values(data.error_breakdown || {}).reduce((a, b) => a + b, 0);
+    const errPct = data.traffic ? (errTotal / data.traffic) * 100 : 0;
+
+    document.getElementById('m-traffic').textContent = data.traffic ?? '-';
+    setMetric('m-latency', `${data.latency_p50 ?? '-'}ms / ${data.latency_p95 ?? '-'}ms`, (data.latency_p95 ?? 0) > SLO.latency_p95_ms);
+    setMetric('m-errors', `${errTotal} (${errPct.toFixed(1)}%)`, errPct > SLO.error_rate_pct);
+    setMetric('m-cost', `$${data.total_cost_usd ?? '-'}`, (data.total_cost_usd ?? 0) > SLO.daily_cost_usd);
+    document.getElementById('m-tokens').textContent = `${data.tokens_in_total ?? '-'} / ${data.tokens_out_total ?? '-'}`;
+    setMetric('m-quality', data.quality_avg ?? '-', data.quality_avg != null && data.quality_avg < SLO.quality_score_avg);
+  } catch (e) { /* metrics optional */ }
+}
+
+function renderIncidents(state) {
+  const box = document.getElementById('incidents-box');
+  const names = Object.keys(state);
+  if (!names.length) { box.textContent = 'chưa cấu hình incident nào'; return; }
+  box.innerHTML = '';
+  names.forEach((name) => {
+    const on = !!state[name];
+    const row = document.createElement('div');
+    row.className = 'incident-row';
+    row.innerHTML = `
+      <span class="name">${name}</span>
+      <span style="display:flex; align-items:center; gap:8px;">
+        <span class="pill ${on ? 'on' : ''}">${on ? 'ĐANG BẬT' : 'tắt'}</span>
+        <button class="secondary ${on ? 'danger-active' : ''}" data-name="${name}" data-on="${on}">${on ? 'Tắt' : 'Bật'}</button>
+      </span>
+    `;
+    box.appendChild(row);
+  });
+  box.querySelectorAll('button[data-name]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const name = btn.dataset.name;
+      const isOn = btn.dataset.on === 'true';
+      const action = isOn ? 'disable' : 'enable';
+      btn.disabled = true;
+      try {
+        await fetch(`/incidents/${name}/${action}`, { method: 'POST' });
+        await refreshHealth();
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  });
+}
+
+document.getElementById('message').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) sendChat();
+});
+
+refreshHealth();
+refreshMetrics();
+setInterval(refreshHealth, 5000);
+setInterval(refreshMetrics, 5000);
+</script>
+
+</body>
+</html>
