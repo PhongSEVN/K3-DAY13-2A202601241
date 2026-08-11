@@ -4,7 +4,7 @@
 
 - Tên nhóm: Nhóm Day13 Observability (K3)
 - Repository URL: https://github.com/PhongSEVN/K3-DAY13-2A202601241
-- Commit SHA cuối: _(điền sau khi push cuối)_
+- Commit SHA cuối: `0c73cc0` (main sau merge PR #6)
 - Thành viên và vai trò:
 
   | Vai | Thành viên | MSSV |
@@ -121,6 +121,6 @@ Bằng chứng đầy đủ: [evidence/cp3-metrics-before-after.txt](evidence/cp
 |---|---|---|---|
 | Phạm Khánh Linh (E) | Setup + baseline CP0; tách span `rag-retrieve`/`llm-generate` và log latency theo bước; sửa lỗi mất trace do `LANGFUSE_TIMEOUT`; A/B prompt v1/v2; promote + rollback label `production`; chạy và điều tra challenge CP3; tổng hợp `REPORT.md` + evidence | PR `linh` | `tracing_enabled: true` chỉ nghĩa là có key, không đảm bảo trace đã lên được server — phải kiểm chứng bằng API. Một span duy nhất cho cả request là vô dụng khi debug. `time.sleep()` trong `async def` block cả event loop và khuếch đại sự cố theo số request đồng thời. |
 | Lê Thị Yến Nhi (A) | Correlation ID middleware + enrich log context | branch `feat/a-middleware` | Propagation correlation ID xuyên request |
-| Nguyễn Văn Phong (B) | PII patterns + scrubber; hỗ trợ dashboard/evidence CP2–CP3 | `feat/cp2-observability` | Redact trước khi ghi JSONL; nối Metrics → Traces → Logs |
+| Nguyễn Văn Phong (B) | CP1: PII patterns + scrubber + đăng ký `scrub_event`; CP2: dashboard Streamlit, evidence Langfuse/dashboard; CP3: điều tra challenge, ảnh evidence, gộp `REPORT.md` | [PR #1](https://github.com/PhongSEVN/K3-DAY13-2A202601241/pull/1) (cp1 / `feat/a-middleware`); [PR #4](https://github.com/PhongSEVN/K3-DAY13-2A202601241/pull/4) (cp2 / `feat/cp2-observability`); [PR #6](https://github.com/PhongSEVN/K3-DAY13-2A202601241/pull/6) (cp3 evidence) — cả 3 đã merge | Redact trước khi ghi JSONL; nối Metrics → Traces → Logs |
 | Nguyễn Thanh Phúc (C) | Dashboard 6 panel / `error_rate_pct` | dashboard evidence | Đọc metrics từ `logs.jsonl` |
 | Vũ Huy Hoàng (D) | SLO, 3 alerts, runbook | PR `feat/d-slo-alerts` | Alert symptom-based theo SLO |
