@@ -1,0 +1,40 @@
+{
+  "cohort": "K3",
+  "challenge_id": "day13-k3-observability-v1",
+  "incident": "rag_slow",
+  "seed": 1303,
+  "affected_feature": "refund",
+  "latency_threshold_ms": 2000,
+  "queries": [
+    {
+      "user_id": "k3-u01",
+      "session_id": "k3-challenge-s01",
+      "feature": "refund",
+      "message": "What is your refund policy?"
+    },
+    {
+      "user_id": "k3-u02",
+      "session_id": "k3-challenge-s02",
+      "feature": "refund",
+      "message": "What proof is required for a refund?"
+    },
+    {
+      "user_id": "k3-u03",
+      "session_id": "k3-challenge-s03",
+      "feature": "refund",
+      "message": "Explain the refund window and required evidence."
+    },
+    {
+      "user_id": "k3-u04",
+      "session_id": "k3-challenge-s04",
+      "feature": "refund",
+      "message": "Can a customer request a refund after purchase?"
+    },
+    {
+      "user_id": "k3-u05",
+      "session_id": "k3-challenge-s05",
+      "feature": "refund",
+      "message": "Summarize the refund policy for a support agent."
+    }
+  ]
+}
