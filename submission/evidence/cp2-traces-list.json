@@ -1,0 +1,788 @@
+{
+  "total_traces": 87,
+  "traces": [
+    {
+      "trace_id": "74f1f5aa638706318e2163adeeb55b41",
+      "timestamp": "2026-08-11T03:30:35.980Z",
+      "session": "s_after_fix",
+      "latency_s": 0.154,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "32b606ce614358f76e21475abccbc423",
+      "timestamp": "2026-08-11T03:29:30.339Z",
+      "session": "s_demo_01",
+      "latency_s": 0.15,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "06a08e6d1a3ac55e68c194c5cb5adbd7",
+      "timestamp": "2026-08-11T03:29:20.879Z",
+      "session": "k3-challenge-s04",
+      "latency_s": 2.656,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "d5b69cd282f850cdad9a9336a0ed9e66",
+      "timestamp": "2026-08-11T03:29:18.215Z",
+      "session": "k3-challenge-s05",
+      "latency_s": 2.657,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "c8f8597dc6a6dd7febdeb9d6ad79f766",
+      "timestamp": "2026-08-11T03:29:15.558Z",
+      "session": "k3-challenge-s03",
+      "latency_s": 2.655,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "29fb0491cbca897f1daf5148856badc1",
+      "timestamp": "2026-08-11T03:29:12.899Z",
+      "session": "k3-challenge-s02",
+      "latency_s": 2.655,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "26c1bec9d203747a6199dd2df08a0d48",
+      "timestamp": "2026-08-11T03:29:10.242Z",
+      "session": "k3-challenge-s01",
+      "latency_s": 2.655,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "140138e587d3a14c9036cfa57a26fef0",
+      "timestamp": "2026-08-11T03:28:54.735Z",
+      "session": "s10",
+      "latency_s": 0.154,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "485ade2bde439a739e833851340cbbc0",
+      "timestamp": "2026-08-11T03:28:54.566Z",
+      "session": "s09",
+      "latency_s": 0.155,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "1471ed47772e8e49f6788090ea346d29",
+      "timestamp": "2026-08-11T03:28:54.372Z",
+      "session": "s08",
+      "latency_s": 0.156,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "25ced38529e51f19f0cba510ca739d27",
+      "timestamp": "2026-08-11T03:28:54.176Z",
+      "session": "s07",
+      "latency_s": 0.157,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "42e937bf9d75375e3a5c7a88fd0f15de",
+      "timestamp": "2026-08-11T03:28:53.981Z",
+      "session": "s06",
+      "latency_s": 0.156,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "91163e7340999d05544c85374bb0bb21",
+      "timestamp": "2026-08-11T03:28:53.810Z",
+      "session": "s05",
+      "latency_s": 0.154,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "62dac840df800555c99c2a6df32fc6f0",
+      "timestamp": "2026-08-11T03:28:53.634Z",
+      "session": "s04",
+      "latency_s": 0.156,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "7022d773e7f7b845ec228736f8ca7a9d",
+      "timestamp": "2026-08-11T03:28:53.461Z",
+      "session": "s03",
+      "latency_s": 0.155,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "d1f3a91c7929d92449810a28b73d2c3f",
+      "timestamp": "2026-08-11T03:28:53.274Z",
+      "session": "s02",
+      "latency_s": 0.158,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "b6d9f989e67989d38b3a83318e9aac89",
+      "timestamp": "2026-08-11T03:28:52.171Z",
+      "session": "s01",
+      "latency_s": 1.087,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "2e7a97fc6c92cfa25ad8f888cceff2b9",
+      "timestamp": "2026-08-11T03:28:50.077Z",
+      "session": "s_demo_01",
+      "latency_s": 0.152,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "fcfeff3c25288a42c1534d4cf03606e7",
+      "timestamp": "2026-08-11T03:28:49.902Z",
+      "session": "s_demo_01",
+      "latency_s": 0.152,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "c13dc7d20bf99b930e6fdd71a4667c26",
+      "timestamp": "2026-08-11T03:28:49.723Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "ff47968a326a4756482b0b7745feff3c",
+      "timestamp": "2026-08-11T03:28:49.541Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "dbc2602bb3bcd31c67abe5b18402756e",
+      "timestamp": "2026-08-11T03:28:49.369Z",
+      "session": "s_demo_01",
+      "latency_s": 0.152,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "43556d21973ffbffcb767d950ab0f762",
+      "timestamp": "2026-08-11T03:28:49.174Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "75c7dc1e2d6267ce0d3396b0ad52f96d",
+      "timestamp": "2026-08-11T03:28:49.002Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "a927981ab631d5d409b4f1e83ef65b93",
+      "timestamp": "2026-08-11T03:28:48.827Z",
+      "session": "s_demo_01",
+      "latency_s": 0.153,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "c78773d6def0617fb6790dcdfc5f15ce",
+      "timestamp": "2026-08-11T03:28:48.656Z",
+      "session": "s_demo_01",
+      "latency_s": 0.15,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "531eb5bf8c39a7a59629efdf399a62ac",
+      "timestamp": "2026-08-11T03:28:48.491Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "9c88d5122ba3698a37a8281ddb9a7453",
+      "timestamp": "2026-08-11T03:28:48.311Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "c94b78c54ceeb2edc448c2f892872d7c",
+      "timestamp": "2026-08-11T03:28:48.132Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "5a6daa04d1a235ba317e7b0b758f0abb",
+      "timestamp": "2026-08-11T03:28:47.952Z",
+      "session": "s_demo_01",
+      "latency_s": 0.152,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "ea88ed41d4db3b34e2a083ad86eea1c8",
+      "timestamp": "2026-08-11T03:28:47.765Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "fa43695d8e51e15ca114484084736768",
+      "timestamp": "2026-08-11T03:28:47.586Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "4b7b73d19b80db1518b5bd8a2a024f4d",
+      "timestamp": "2026-08-11T03:28:47.400Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "bbc89d02716980f0bd50f94e1479a391",
+      "timestamp": "2026-08-11T03:28:47.206Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "f26f9fad863920e278253ffcdf2354f2",
+      "timestamp": "2026-08-11T03:28:47.026Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "521f98b3a7b86f90774d3d49f7abf5f5",
+      "timestamp": "2026-08-11T03:28:46.854Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "90ed584cd3661e04bc8ef892c9b386c0",
+      "timestamp": "2026-08-11T03:28:46.673Z",
+      "session": "s_demo_01",
+      "latency_s": 0.152,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "38877a3792710eff3ae7f8d0495ea98a",
+      "timestamp": "2026-08-11T03:28:46.500Z",
+      "session": "s_demo_01",
+      "latency_s": 0.152,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "1c73ad7e258eef1c7280f98cfa905ff5",
+      "timestamp": "2026-08-11T03:28:46.326Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "acb9fb77a337709130087e126a69323d",
+      "timestamp": "2026-08-11T03:28:46.161Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "4878c39b74bad4eae3c8fd65882ed33c",
+      "timestamp": "2026-08-11T03:28:45.988Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "9cec5c563ff19774b687b879bd3c132e",
+      "timestamp": "2026-08-11T03:28:45.821Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "a43d0b7f310e6adc22394f3892035b73",
+      "timestamp": "2026-08-11T03:28:45.657Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "f6f910c07a4a9e0908b8d68871e68c85",
+      "timestamp": "2026-08-11T03:28:45.491Z",
+      "session": "s_demo_01",
+      "latency_s": 0.152,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "f2f03e12d01850e7d7916887e6383ee0",
+      "timestamp": "2026-08-11T03:28:45.331Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "d08762a019c986003e2f26260d748d98",
+      "timestamp": "2026-08-11T03:28:45.008Z",
+      "session": "s_demo_01",
+      "latency_s": 0.15,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "c2209eb47632ab7a015af24e0a11d34f",
+      "timestamp": "2026-08-11T03:28:44.842Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "d55a49cd42dbd63c3be9f7bcfaefb75a",
+      "timestamp": "2026-08-11T03:28:44.675Z",
+      "session": "s_demo_01",
+      "latency_s": 0.152,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "3f5ac4448c44b14420a8d0ca4822d9ea",
+      "timestamp": "2026-08-11T03:28:44.510Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "531831c4f7e277eb8001ceba83d446ac",
+      "timestamp": "2026-08-11T03:28:44.347Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "861beb1283267ffa299b165f06cc4ba2",
+      "timestamp": "2026-08-11T03:28:44.173Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "348706c47de12f7c4a3d68b77f74d47b",
+      "timestamp": "2026-08-11T03:28:44.007Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "fcc2b2275200eecaf62716cc357a66ec",
+      "timestamp": "2026-08-11T03:28:43.835Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "1a93c8531c3da845c59047ed401dc8af",
+      "timestamp": "2026-08-11T03:28:43.620Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "fc9a76b7192f647cfaa0b401817104af",
+      "timestamp": "2026-08-11T03:28:43.376Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "58199db50972776bfd978119256e6611",
+      "timestamp": "2026-08-11T03:28:42.254Z",
+      "session": "s_demo_01",
+      "latency_s": 0.152,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "d67a410cce0a464b43288d4bad9e4676",
+      "timestamp": "2026-08-11T03:28:34.489Z",
+      "session": "s_demo_01",
+      "latency_s": 0.152,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "9537cee211add9949a60c67a55610aac",
+      "timestamp": "2026-08-11T03:28:27.584Z",
+      "session": "s_demo_01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "498d5bd8880a75c33ccc908ec61d0109",
+      "timestamp": "2026-08-11T03:28:26.330Z",
+      "session": "s_demo_01",
+      "latency_s": 1.094,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "56118dfc5b0c8b787a21cee2bd1b4976",
+      "timestamp": "2026-08-11T03:27:36.741Z",
+      "session": "s_rollback_restored",
+      "latency_s": 1.258,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "f48d1f9fe613bf51e80f247de1833126",
+      "timestamp": "2026-08-11T03:26:59.923Z",
+      "session": "s_rollback_promoted",
+      "latency_s": 1.111,
+      "prompt_label": "production",
+      "prompt_version": 2,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "59b52aaf6d66d8673e20a19c7c8e32d1",
+      "timestamp": "2026-08-11T03:25:43.911Z",
+      "session": "s1",
+      "latency_s": 1.072,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "388d20e1146e5715891bdf36ac5b5d77",
+      "timestamp": "2026-08-11T03:25:11.500Z",
+      "session": "s_ab_candidate",
+      "latency_s": 1.127,
+      "prompt_label": "candidate",
+      "prompt_version": 2,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "301ea5b0f276d0f1c985561873459f04",
+      "timestamp": "2026-08-11T03:24:39.963Z",
+      "session": "s_ab_baseline",
+      "latency_s": 1.127,
+      "prompt_label": "baseline",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "52b8ae6464b8565b1cc260ac23bd29c0",
+      "timestamp": "2026-08-11T03:21:45.891Z",
+      "session": "s10",
+      "latency_s": 0.153,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "9fbae7c417017634fc73a19a48216fbb",
+      "timestamp": "2026-08-11T03:21:45.723Z",
+      "session": "s09",
+      "latency_s": 0.152,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "39a72b7edc9d9d99e5217133892929a0",
+      "timestamp": "2026-08-11T03:21:45.553Z",
+      "session": "s08",
+      "latency_s": 0.153,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "4b2bc7b5b880d0a35add4f0fc80749e8",
+      "timestamp": "2026-08-11T03:21:45.384Z",
+      "session": "s07",
+      "latency_s": 0.154,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "a14a0653a869ad60385b08df18e9bc56",
+      "timestamp": "2026-08-11T03:21:45.214Z",
+      "session": "s06",
+      "latency_s": 0.154,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "7cfad87850a9356b5553aa2993339d1c",
+      "timestamp": "2026-08-11T03:21:45.047Z",
+      "session": "s05",
+      "latency_s": 0.153,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "22f4bc13a880aa2eec994614b6f5ed6f",
+      "timestamp": "2026-08-11T03:21:44.875Z",
+      "session": "s04",
+      "latency_s": 0.154,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "1a16957464aeda9cee26c4f731c8a1f0",
+      "timestamp": "2026-08-11T03:21:44.705Z",
+      "session": "s03",
+      "latency_s": 0.154,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "74506fcfc3028ded7f7d088782d67df5",
+      "timestamp": "2026-08-11T03:21:44.534Z",
+      "session": "s02",
+      "latency_s": 0.154,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "6162d95d3117ed9c21d88c5bbe8afa46",
+      "timestamp": "2026-08-11T03:21:43.244Z",
+      "session": "s01",
+      "latency_s": 1.273,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "ed4da9744ca9a7f78a129addd126853e",
+      "timestamp": "2026-08-11T03:20:44.438Z",
+      "session": "probe",
+      "latency_s": 0.152,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "470c5f0fe8143baa51cd970f137777ea",
+      "timestamp": "2026-08-11T03:06:11.535Z",
+      "session": "s_candidate",
+      "latency_s": 1.267,
+      "prompt_label": "candidate",
+      "prompt_version": 2,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "287116b25ab305c5644fb33002161437",
+      "timestamp": "2026-08-11T03:06:10.176Z",
+      "session": "s_baseline",
+      "latency_s": 1.358,
+      "prompt_label": "baseline",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "bcdbc1a8949ea694ec431b7dfc5852e4",
+      "timestamp": "2026-08-11T03:05:52.296Z",
+      "session": "s10",
+      "latency_s": 0.152,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "985f218d76f50ea64295bef15454df6e",
+      "timestamp": "2026-08-11T03:05:52.138Z",
+      "session": "s09",
+      "latency_s": 0.152,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "537aa190afc46a15e99ea37b9fad31af",
+      "timestamp": "2026-08-11T03:05:51.982Z",
+      "session": "s08",
+      "latency_s": 0.152,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "560b0d9d207e25d31a77fd62ec3eb2e4",
+      "timestamp": "2026-08-11T03:05:51.827Z",
+      "session": "s06",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "f87f4fe13c45fe7f3d51b42d603daddb",
+      "timestamp": "2026-08-11T03:05:51.674Z",
+      "session": "s07",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "1c5df04cf1a801518ff357a2b117c8fb",
+      "timestamp": "2026-08-11T03:05:51.515Z",
+      "session": "s05",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "0d6f1e916b9991703e9b5399432dd489",
+      "timestamp": "2026-08-11T03:05:51.360Z",
+      "session": "s01",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "4b03c0e58437dda862b876c1c3f85fde",
+      "timestamp": "2026-08-11T03:05:51.205Z",
+      "session": "s02",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "e2807d3136d889d8aebb65eed8c3ec63",
+      "timestamp": "2026-08-11T03:05:51.050Z",
+      "session": "s03",
+      "latency_s": 0.151,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    },
+    {
+      "trace_id": "1681b7a7604930e056dba863bd53e195",
+      "timestamp": "2026-08-11T03:05:49.652Z",
+      "session": "s04",
+      "latency_s": 1.394,
+      "prompt_label": "production",
+      "prompt_version": 1,
+      "prompt_source": "langfuse"
+    }
+  ]
+}

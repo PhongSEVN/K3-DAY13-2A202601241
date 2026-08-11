@@ -11,6 +11,19 @@ Dashboard chính cần đủ 6 nhóm thông tin:
 5. Tổng token input/output.
 6. Quality proxy.
 
+## Mapping panel → dữ liệu / SLO
+
+| Panel ID | Event / field | Aggregation | Unit | Threshold (SLO line) |
+|---|---|---|---|---|
+| `latency` | `response_sent.latency_ms` | p50, p95, p99 | ms | p95 ≤ 3000 (`latency_p95_ms`) |
+| `traffic` | `request_received` | count, rate_per_minute | requests_per_minute | rate ≥ 1 |
+| `errors` | `request_received`, `request_failed`, `error_type` | error_rate_pct, count_by_value | percent | error_rate_pct ≤ 2 |
+| `cost` | `response_sent.cost_usd` | sum_by_minute, total | usd | total ≤ 2.5 (`daily_cost_usd`) |
+| `tokens` | `response_sent.tokens_in`, `tokens_out` | sum_by_field | tokens | sum ≤ 50000 |
+| `quality` | `response_sent.quality_score` | mean | score_0_to_1 | mean ≥ 0.75 (`quality_score_avg`) |
+
+Runtime tham chiếu: `streamlit run scripts/dashboard_app.py` (nguồn `data/logs.jsonl`).
+
 Tiêu chuẩn trình bày:
 
 - Khoảng thời gian mặc định: 1 giờ.

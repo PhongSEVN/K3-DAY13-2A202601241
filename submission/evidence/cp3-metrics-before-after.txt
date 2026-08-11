@@ -1,0 +1,98 @@
+# CP3 — Challenge day13-k3-observability-v1 (cohort K3)
+# Thoi diem chay: 2026-08-11T03:29:01Z
+# Lenh:
+#   python scripts/inject_incident.py
+#   python scripts/load_test.py --challenge --concurrency 5
+
+=== BUOC 1 — METRICS: phat hien trieu chung ===
+
+GET /metrics TRUOC su co (10 request tai nen tu data/sample_queries.jsonl):
+{"traffic":10,"latency_p50":155.0,"latency_p95":1085.0,"latency_p99":1085.0,
+ "avg_cost_usd":0.0021,"total_cost_usd":0.0213,"tokens_in_total":411,
+ "tokens_out_total":1340,"error_breakdown":{},"quality_avg":0.88}
+
+GET /metrics SAU su co (them 5 request challenge, concurrency 5):
+{"traffic":15,"latency_p50":155.0,"latency_p95":2656.0,"latency_p99":2656.0,
+ "avg_cost_usd":0.0021,"total_cost_usd":0.0311,"tokens_in_total":613,
+ "tokens_out_total":1951,"error_breakdown":{},"quality_avg":0.8733}
+
+Trieu chung:
+  - latency_p95: 1085ms -> 2656ms (tang 2.45 lan).
+      * VUOT nguong challenge latency_threshold_ms = 2000ms
+      * chua vuot SLO cua nhom (config/slo.yaml: p95 <= 3000ms)
+    => Do la ly do can alert theo nguong chat hon SLO: neu chi canh bao khi
+       vuot 3000ms thi su co nay lot luoi hoan toan.
+  - latency_p50 KHONG doi (155ms): chi mot nhom request bi anh huong,
+    dung voi affected_feature="refund".
+  - error_rate = 0, tokens/cost khong bat thuong -> khong phai su co LLM.
+  - Latency do phia client con te hon nhieu: 13.3s/request (xem muc 4).
+
+=== BUOC 2 — TRACES: khoanh vung span bat thuong ===
+
+5 trace challenge (session k3-challenge-s01..s05), deu ~2.655s:
+  k3-challenge-s01 | 26c1bec9d203747a6199dd2df08a0d48 | 2.655s
+  k3-challenge-s02 | 29fb0491cbca897f1daf5148856badc1 | 2.655s
+  k3-challenge-s03 | c8f8597dc6a6dd7febdeb9d6ad79f766 | 2.655s
+  k3-challenge-s04 | 06a08e6d1a3ac55e68c194c5cb5adbd7 | 2.656s
+  k3-challenge-s05 | d5b69cd282f850cdad9a9336a0ed9e66 | 2.657s
+
+Waterfall trace 26c1bec9d203747a6199dd2df08a0d48:
+  run            GENERATION  2.655s   {rag_ms: 2501, llm_ms: 150}
+  rag-retrieve   SPAN        2.501s   {retrieval_ms: 2501}   <-- BAT THUONG
+  llm-generate   SPAN        0.151s   {generation_ms: 150}   <-- binh thuong
+
+=> 94% thoi gian nam o span rag-retrieve. LLM khong lien quan.
+
+=== BUOC 3 — LOGS: chung minh root cause ===
+
+Log tung buoc cua 5 request challenge (data/logs.jsonl):
+  req-1dff757e | rag_retrieved | latency_ms=2501
+  req-1dff757e | llm_generated | latency_ms=150
+  req-1dff757e | response_sent | latency_ms=2654
+  req-ec65a74f | rag_retrieved | latency_ms=2500
+  req-ec65a74f | llm_generated | latency_ms=150
+  req-ec65a74f | response_sent | latency_ms=2655
+  req-a0d3940e | rag_retrieved | latency_ms=2500
+  req-a0d3940e | llm_generated | latency_ms=150
+  req-a0d3940e | response_sent | latency_ms=2653
+  req-ee3ddb27 | rag_retrieved | latency_ms=2500
+  req-ee3ddb27 | llm_generated | latency_ms=150
+  req-ee3ddb27 | response_sent | latency_ms=2656
+  req-07c6efd7 | rag_retrieved | latency_ms=2500
+  req-07c6efd7 | llm_generated | latency_ms=150
+  req-07c6efd7 | response_sent | latency_ms=2655
+
+So sanh truoc/trong su co:
+  TRUOC:  rag trung binh = 0ms    (n=27) | llm trung binh = 150ms (n=27)
+  TRONG:  rag trung binh = 2500ms (n=5)  | llm trung binh = 150ms (n=5)
+
+=> Chi buoc RAG chay cham, deu dan dung 2500ms, do lech chi 0-1ms.
+   Con so qua "tron" -> khong phai nghen tai nguyen that ma la mot do tre
+   co dinh duoc chen vao.
+
+Xac nhan tai source: app/mock_rag.py — khi STATE["rag_slow"] bat thi
+retrieve() goi time.sleep(2.5) truoc khi tra ket qua.
+
+=== BUOC 4 — PHAT HIEN THEM: khuech dai do block event loop ===
+
+Client bao 13.3s/request nhung server chi ghi 2.65s. Chenh lech ~5 lan,
+dung bang concurrency=5.
+
+Nguyen nhan: /chat khai bao la "async def" nhung agent.run() la ham dong bo
+va goi time.sleep(). time.sleep() trong coroutine se BLOCK event loop,
+nen 5 request dong thoi bi xep hang noi tiep thay vi chay song song:
+  5 x 2.65s = 13.3s.
+
+Hau qua: mot su co RAG cham 2.5s bien thanh 13.3s duoi tai dong thoi.
+Day la loi khuech dai, khong phai nguyen nhan goc, nhung lam su co
+nghiem trong hon nhieu lan.
+
+=== BUOC 5 — XAC NHAN HOI PHUC ===
+
+python scripts/inject_incident.py --disable
+  -> {'ok': True, 'incidents': {'rag_slow': False, ...}}
+
+Request kiem chung sau khi tat su co:
+  session s_after_fix | corr=req-4ff8b73c | latency_ms=154
+
+=> 2655ms -> 154ms. Xac nhan dung nguyen nhan.
