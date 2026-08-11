@@ -7,11 +7,12 @@ PII_PATTERNS: dict[str, str] = {
     "email": r"[\w\.-]+@[\w\.-]+\.\w+",
     "phone_vn": r"(?<!\d)(?:\+84|0)(?:[ .-]?\d){9}(?!\d)",
     "cccd": r"\b\d{12}\b",
-    "credit_card": r"\b\d{4}[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}\b",
-    "passport": r"\b[A-Z]\d{7}\b",
+    "credit_card": r"\b\d{4}[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}\b|\b\d{13,19}\b",
+    "passport": r"(?i)\b[A-Z]\d{7}\b",
     "address_vn": (
-        r"(?i)\b(?:số\s+\d+[A-Za-z]?/?\d*|đường|phố|quận|huyện|phường|xã|"
-        r"thành phố|tp\.?)\s+[\wÀ-ỹ\s,./-]{3,60}"
+        r"(?i)\b(?:số\s+\d+[A-Za-z]?/?\d*|đường|duong|phố|pho|quận|quan|"
+        r"huyện|huyen|phường|phuong|xã|xa|thành phố|thanh phố|thanh pho|tp\.?)"
+        r"\s+[\wÀ-ỹ\s,./-]{3,60}"
     ),
 }
 
