@@ -1,4 +1,3 @@
-
 # Alert và Runbook
 
 Mỗi alert trong hệ thống được thiết kế theo hướng **symptom-based**, tức là dựa trên triệu chứng người dùng gặp phải hoặc dựa trên việc vi phạm SLO. Alert không phụ thuộc trực tiếp vào tên class, function hoặc module triển khai nội bộ.
