@@ -1,15 +1,17 @@
 from __future__ import annotations
 
+import json
+import math
 import os
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.responses import FileResponse, JSONResponse
 from structlog.contextvars import bind_contextvars
 
 from .agent import LabAgent
 from .incidents import disable, enable, status
-from .logging_config import configure_logging, get_logger
+from .logging_config import LOG_PATH, configure_logging, get_logger
 from .metrics import record_error, snapshot
 from .middleware import CorrelationIdMiddleware
 from .pii import hash_user_id, summarize_text
@@ -48,6 +50,48 @@ async def health() -> dict:
 @app.get("/metrics")
 async def metrics() -> dict:
     return snapshot()
+
+
+@app.get("/logs")
+async def logs(
+    page: int = Query(default=1, ge=1),
+    page_size: int = Query(default=20, ge=1, le=200),
+    level: str | None = Query(default=None, description="loc theo level, vi du: error hoac error,warning"),
+) -> dict:
+    if not LOG_PATH.exists():
+        return {"records": [], "total": 0, "page": page, "page_size": page_size, "total_pages": 0}
+
+    wanted_levels = None
+    if level:
+        wanted_levels = {v.strip().lower() for v in level.split(",") if v.strip()}
+
+    records: list[dict] = []
+    for line in LOG_PATH.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        try:
+            rec = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if wanted_levels and str(rec.get("level", "")).lower() not in wanted_levels:
+            continue
+        records.append(rec)
+
+    # moi nhat truoc, dung cho viec kiem tra loi gan day nhat
+    records.reverse()
+
+    total = len(records)
+    total_pages = max(1, math.ceil(total / page_size))
+    start = (page - 1) * page_size
+    page_records = records[start : start + page_size]
+
+    return {
+        "records": page_records,
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "total_pages": total_pages,
+    }
 
 
 @app.post("/chat", response_model=ChatResponse)

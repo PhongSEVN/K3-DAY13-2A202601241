@@ -393,6 +393,133 @@
       border-top: 1px solid var(--border);
     }
 
+    .tabs {
+      display: flex;
+      gap: 4px;
+      padding: 10px 16px 0;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .tab-btn {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-bottom: none;
+      padding: 8px 16px;
+      border-radius: 8px 8px 0 0;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      color: var(--text);
+      background: var(--panel);
+      border-color: var(--border);
+    }
+
+    .tab-panel[hidden] {
+      display: none;
+    }
+
+    .logs-panel {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 16px 16px;
+    }
+
+    .logs-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .logs-toolbar select {
+      width: auto;
+    }
+
+    .logs-toolbar .spacer {
+      flex: 1;
+    }
+
+    .log-table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    table.log-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    table.log-table th {
+      text-align: left;
+      padding: 8px 10px;
+      background: var(--panel-2);
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    table.log-table td {
+      padding: 7px 10px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    table.log-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    table.log-table .ts {
+      white-space: nowrap;
+      color: var(--muted);
+    }
+
+    table.log-table .detail {
+      max-width: 420px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .level-tag {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .level-tag.info { color: var(--muted); background: var(--panel-2); }
+    .level-tag.warning { color: var(--warn); background: var(--warn-bg); }
+    .level-tag.error, .level-tag.critical { color: var(--err); background: #fbdedb; }
+
+    tr.log-row.is-error { background: #fdf4f3; }
+
+    .logs-pager {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
     a {
       color: var(--accent);
     }
@@ -411,7 +538,12 @@
     <span class="tag"><span id="health-dot"></span><span id="health-text">checking...</span></span>
   </header>
 
-  <main>
+  <nav class="tabs">
+    <button class="tab-btn active" id="tab-btn-demo" onclick="switchTab('demo')">Demo</button>
+    <button class="tab-btn" id="tab-btn-logs" onclick="switchTab('logs')">Logs (data/logs.jsonl)</button>
+  </nav>
+
+  <main id="tab-demo" class="tab-panel">
     <section class="panel">
       <h2>1. Chat — gửi request test</h2>
       <p class="hint">Điền thông tin bên dưới rồi bấm "Gửi request". Mỗi lần gửi = 1 request thật tới API
@@ -451,7 +583,7 @@
           <code>config/slo.yaml</code> (vai D).</p>
         <div id="metrics-box">
           <div class="kv"><span class="k">traffic (tổng số request)</span><span class="v" id="m-traffic">-</span></div>
-          <div class="kv"><span class="k">latency p50 / p95 (ms) — SLO ≤ 3000</span><span class="v"
+          <div class="kv"><span class="k">latency p50 / p95 (ms) — ngưỡng ≤ 2100</span><span class="v"
               id="m-latency">-</span></div>
           <div class="kv"><span class="k">error rate — SLO ≤ 2%</span><span class="v" id="m-errors">-</span></div>
           <div class="kv"><span class="k">total cost (USD) — SLO/ngày ≤ 2.5</span><span class="v" id="m-cost">-</span>
@@ -479,6 +611,61 @@
 
     </aside>
   </main>
+
+  <section id="tab-logs" class="tab-panel logs-panel" hidden>
+    <div class="panel">
+      <h2>Logs — data/logs.jsonl</h2>
+      <p class="hint">Đọc trực tiếp file log qua API <code>/logs</code> (có phân trang, không load hết file 1 lần). Dùng
+        để soi lỗi cụ thể: lọc theo level, tìm dòng <code>request_failed</code> để xem <code>error_type</code> +
+        chi tiết.</p>
+
+      <div class="logs-toolbar">
+        <div class="field" style="margin-bottom:0;">
+          <label for="log-level">level</label>
+          <select id="log-level" onchange="loadLogs(1)">
+            <option value="">tất cả</option>
+            <option value="error,critical">chỉ lỗi (error/critical)</option>
+            <option value="warning">chỉ warning</option>
+            <option value="info">chỉ info</option>
+          </select>
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <label for="log-page-size">số dòng / trang</label>
+          <select id="log-page-size" onchange="loadLogs(1)">
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </div>
+        <span class="spacer"></span>
+        <span id="logs-total" class="k" style="font-size:11px;">-</span>
+        <button class="secondary" onclick="loadLogs(currentLogPage)">Làm mới</button>
+      </div>
+
+      <div class="log-table-wrap">
+        <table class="log-table">
+          <thead>
+            <tr>
+              <th>Thời gian</th>
+              <th>Level</th>
+              <th>Event</th>
+              <th>Correlation ID</th>
+              <th>Chi tiết</th>
+            </tr>
+          </thead>
+          <tbody id="logs-tbody">
+            <tr><td colspan="5" style="text-align:center; color:var(--muted); padding:20px;">đang tải...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="logs-pager">
+        <button class="secondary" id="logs-prev" onclick="loadLogs(currentLogPage - 1)">&larr; Trước</button>
+        <span id="logs-page-indicator">trang - / -</span>
+        <button class="secondary" id="logs-next" onclick="loadLogs(currentLogPage + 1)">Sau &rarr;</button>
+      </div>
+    </div>
+  </section>
 
   <footer>
     Giao diện này chạy chung tiến trình với API backend (FastAPI serve trực tiếp), không cần server riêng.
@@ -562,9 +749,11 @@
       }
     }
 
-    // nguong tu config/slo.yaml (vai D) - copy tay, khong doc file truc tiep tu trinh duyet
+    // latency_p95_ms: nguong rieng cho demo (chat hon SLO chinh thuc 3000ms trong config/slo.yaml).
+    // Ly do: incident rag_slow (~2650ms) van duoi SLO 3000ms nen khong bao gio bao do neu dung dung SLO -
+    // xem phat hien cua Linh trong REPORT.md muc 5. Cac nguong con lai lay dung tu config/slo.yaml (vai D).
     const SLO = {
-      latency_p95_ms: 3000,
+      latency_p95_ms: 2100,
       error_rate_pct: 2,
       daily_cost_usd: 2.5,
       quality_score_avg: 0.75,
@@ -633,6 +822,84 @@
     document.getElementById('message').addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) sendChat();
     });
+
+    // ---- Tab Logs (data/logs.jsonl qua API /logs, co phan trang) ----
+    let currentLogPage = 1;
+    let logsLoadedOnce = false;
+
+    function switchTab(name) {
+      document.getElementById('tab-demo').hidden = name !== 'demo';
+      document.getElementById('tab-logs').hidden = name !== 'logs';
+      document.getElementById('tab-btn-demo').classList.toggle('active', name === 'demo');
+      document.getElementById('tab-btn-logs').classList.toggle('active', name === 'logs');
+      if (name === 'logs' && !logsLoadedOnce) {
+        logsLoadedOnce = true;
+        loadLogs(1);
+      }
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function summarizeLogDetail(rec) {
+      const parts = [];
+      if (rec.service) parts.push(`service=${rec.service}`);
+      if (rec.error_type) parts.push(`error_type=${rec.error_type}`);
+      if (rec.latency_ms != null) parts.push(`latency_ms=${rec.latency_ms}`);
+      if (rec.feature) parts.push(`feature=${rec.feature}`);
+      if (rec.session_id) parts.push(`session_id=${rec.session_id}`);
+      if (rec.payload && typeof rec.payload === 'object') {
+        for (const [k, v] of Object.entries(rec.payload)) {
+          parts.push(`${k}=${typeof v === 'string' ? v : JSON.stringify(v)}`);
+        }
+      }
+      return parts.join('  ·  ') || '-';
+    }
+
+    async function loadLogs(page) {
+      if (page < 1) return;
+      const level = document.getElementById('log-level').value;
+      const pageSize = document.getElementById('log-page-size').value;
+      const tbody = document.getElementById('logs-tbody');
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--muted); padding:20px;">đang tải...</td></tr>';
+
+      try {
+        const params = new URLSearchParams({ page, page_size: pageSize });
+        if (level) params.set('level', level);
+        const res = await fetch(`/logs?${params.toString()}`);
+        const data = await res.json();
+        currentLogPage = data.page;
+
+        document.getElementById('logs-total').textContent = `${data.total} dòng`;
+        document.getElementById('logs-page-indicator').textContent = `trang ${data.page} / ${data.total_pages}`;
+        document.getElementById('logs-prev').disabled = data.page <= 1;
+        document.getElementById('logs-next').disabled = data.page >= data.total_pages;
+
+        if (!data.records.length) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--muted); padding:20px;">không có dòng log nào khớp</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = data.records.map((rec) => {
+          const lvl = (rec.level || 'info').toLowerCase();
+          const isErr = lvl === 'error' || lvl === 'critical';
+          return `
+            <tr class="log-row ${isErr ? 'is-error' : ''}">
+              <td class="ts">${escapeHtml(rec.ts || '-')}</td>
+              <td><span class="level-tag ${lvl}">${escapeHtml(lvl)}</span></td>
+              <td>${escapeHtml(rec.event || '-')}</td>
+              <td>${escapeHtml(rec.correlation_id || '-')}</td>
+              <td class="detail">${escapeHtml(summarizeLogDetail(rec))}</td>
+            </tr>
+          `;
+        }).join('');
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--err); padding:20px;">lỗi tải log: ${escapeHtml(String(e))}</td></tr>`;
+      }
+    }
 
     refreshHealth();
     refreshMetrics();

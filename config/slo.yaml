@@ -4,7 +4,7 @@ window: 28d
 
 slis:
   latency_p95_ms:
-    objective: 3000
+    objective: 2100
     target: 99.5
     note: P95 latency should remain at or below 3000 ms.
 
