@@ -488,11 +488,44 @@
     }
 
     table.log-table .detail {
-      max-width: 420px;
+      max-width: 460px;
       white-space: pre-wrap;
       word-break: break-word;
       color: var(--muted);
       font-size: 11px;
+    }
+
+    .detail-expanded div {
+      margin-bottom: 3px;
+    }
+
+    .detail-expanded b {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .raw-json {
+      margin-top: 6px;
+    }
+
+    .raw-json summary {
+      cursor: pointer;
+      color: var(--accent);
+      font-size: 10px;
+      user-select: none;
+    }
+
+    .raw-json pre {
+      margin: 6px 0 0;
+      padding: 8px;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      max-height: 220px;
+      overflow: auto;
+      font-size: 10px;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
     .level-tag {
@@ -509,6 +542,7 @@
     .level-tag.error, .level-tag.critical { color: var(--err); background: #fbdedb; }
 
     tr.log-row.is-error { background: #fdf4f3; }
+    tr.log-row.is-warning { background: #fdf8ec; }
 
     .logs-pager {
       display: flex;
@@ -859,6 +893,46 @@
       return parts.join('  ·  ') || '-';
     }
 
+    function fieldRow(label, value) {
+      return `<div><b>${escapeHtml(label)}:</b> ${escapeHtml(String(value))}</div>`;
+    }
+
+    // warning/error: liet ke day du tung field + JSON tho, de dieu tra khong phai doan.
+    // info: chi can dong tom tat ngan, tranh ram bang.
+    function renderDetailCell(rec) {
+      const lvl = (rec.level || 'info').toLowerCase();
+      const isNotable = lvl === 'error' || lvl === 'critical' || lvl === 'warning';
+
+      if (!isNotable) {
+        return escapeHtml(summarizeLogDetail(rec));
+      }
+
+      const rows = [];
+      if (rec.service) rows.push(fieldRow('service', rec.service));
+      if (rec.error_type) rows.push(fieldRow('error_type', rec.error_type));
+      if (rec.latency_ms != null) rows.push(fieldRow('latency_ms', rec.latency_ms));
+      if (rec.tokens_in != null || rec.tokens_out != null) {
+        rows.push(fieldRow('tokens', `${rec.tokens_in ?? '-'} in / ${rec.tokens_out ?? '-'} out`));
+      }
+      if (rec.cost_usd != null) rows.push(fieldRow('cost_usd', rec.cost_usd));
+      if (rec.quality_score != null) rows.push(fieldRow('quality_score', rec.quality_score));
+      if (rec.feature) rows.push(fieldRow('feature', rec.feature));
+      if (rec.session_id) rows.push(fieldRow('session_id', rec.session_id));
+      if (rec.user_id_hash) rows.push(fieldRow('user_id_hash', rec.user_id_hash));
+      if (rec.model) rows.push(fieldRow('model', rec.model));
+      if (rec.payload && typeof rec.payload === 'object') {
+        for (const [k, v] of Object.entries(rec.payload)) {
+          rows.push(fieldRow(`payload.${k}`, typeof v === 'string' ? v : JSON.stringify(v)));
+        }
+      }
+
+      const raw = escapeHtml(JSON.stringify(rec, null, 2));
+      return `
+        <div class="detail-expanded">${rows.join('')}</div>
+        <details class="raw-json"><summary>xem JSON đầy đủ</summary><pre>${raw}</pre></details>
+      `;
+    }
+
     async function loadLogs(page) {
       if (page < 1) return;
       const level = document.getElementById('log-level').value;
@@ -886,13 +960,14 @@
         tbody.innerHTML = data.records.map((rec) => {
           const lvl = (rec.level || 'info').toLowerCase();
           const isErr = lvl === 'error' || lvl === 'critical';
+          const isWarn = lvl === 'warning';
           return `
-            <tr class="log-row ${isErr ? 'is-error' : ''}">
+            <tr class="log-row ${isErr ? 'is-error' : isWarn ? 'is-warning' : ''}">
               <td class="ts">${escapeHtml(rec.ts || '-')}</td>
               <td><span class="level-tag ${lvl}">${escapeHtml(lvl)}</span></td>
               <td>${escapeHtml(rec.event || '-')}</td>
               <td>${escapeHtml(rec.correlation_id || '-')}</td>
-              <td class="detail">${escapeHtml(summarizeLogDetail(rec))}</td>
+              <td class="detail">${renderDetailCell(rec)}</td>
             </tr>
           `;
         }).join('');
